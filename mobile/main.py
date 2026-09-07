@@ -1,5 +1,13 @@
+import theme  # Thème d'abord
+
+from kivy.config import Config
+Config.set('graphics', 'width', '360')
+Config.set('graphics', 'height', '640')
+Config.set('graphics', 'resizable', False)
+
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager
+from kivy.core.window import Window
+from kivy.uix.screenmanager import ScreenManager, FadeTransition
 
 from screens.login_screen import LoginScreen
 from screens.home_screen import HomeScreen
@@ -10,16 +18,14 @@ from screens.defis_liste_screen import DefisListeScreen
 from screens.notifications_screen import NotificationsScreen
 from screens.historique_screen import HistoriqueScreen
 
+Window.size = (360, 640)
 
 class QuizScreenManager(ScreenManager):
-    """ScreenManager étendu pour garder en mémoire l'élève connecté
-    et le partager entre tous les écrans de l'app."""
     eleve_connecte = None
-
 
 class QuizApp(App):
     def build(self):
-        sm = QuizScreenManager()
+        sm = QuizScreenManager(transition=FadeTransition(duration=0.25))
         sm.add_widget(LoginScreen())
         sm.add_widget(HomeScreen())
         sm.add_widget(QuizScreen())
@@ -30,7 +36,6 @@ class QuizApp(App):
         sm.add_widget(HistoriqueScreen())
         sm.current = "login"
         return sm
-
 
 if __name__ == "__main__":
     QuizApp().run()

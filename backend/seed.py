@@ -5,8 +5,8 @@ le login et la vérification de matière sans attendre le back-office admin.
 Utilisation : python seed.py
 """
 
-from app.database import Base, SessionLocal, engine
-from app.models import Eleve, Matiere
+from backend.app.database import Base, SessionLocal, engine
+from backend.app.models import Eleve, Matiere
 
 Base.metadata.create_all(bind=engine)
 

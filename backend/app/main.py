@@ -2,16 +2,21 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-from app.routers import admin, auth, classement, defis, historique, matieres, notifications, quiz
+from app.routers import quiz
+from app.routers import admin
+from app.routers import auth
+from app.routers import classement
+from app.routers import defis
+from app.routers import historique
+from app.routers import matieres
+from app.routers import notifications
+from app.routers import eleves   # <-- ajout de l'import manquant
 
-# Crée les tables si elles n'existent pas encore (suffisant pour le développement ;
-# pour la prod, utiliser Alembic pour gérer les migrations proprement)
+# Crée les tables si elles n'existent pas encore
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Quiz App API", version="0.1.0")
 
-# Autorise l'interface d'admin (fichier HTML statique) à appeler l'API depuis
-# n'importe quelle origine. À restreindre à un domaine précis en production.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,6 +32,7 @@ app.include_router(defis.router)
 app.include_router(admin.router)
 app.include_router(notifications.router)
 app.include_router(historique.router)
+app.include_router(eleves.router)   # <-- maintenant reconnu
 
 
 @app.get("/")

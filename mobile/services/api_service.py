@@ -46,15 +46,32 @@ class ApiService:
     @staticmethod
     def lister_matieres():
         """
-        Récupère la liste des matières universitaires disponibles, pour peupler
-        les listes déroulantes (accueil et création de défi).
+        Récupère la liste des matières universitaires disponibles (noms uniquement).
         Retourne (succes: bool, donnees_ou_message: list|str)
+        Le backend renvoie une liste de chaînes, ex: ["Algorithmique", "Base de données", ...]
         """
         try:
             response = requests.get(f"{BASE_URL}/matieres", timeout=10)
             if response.status_code == 200:
                 return True, response.json()
             return False, "Erreur lors de la récupération des matières."
+        except requests.exceptions.RequestException:
+            return False, "Impossible de joindre le serveur. Vérifiez votre connexion."
+
+    @staticmethod
+    def lister_eleves():
+        """
+        Récupère la liste des élèves (matricule, nom, etc.) pour peupler
+        le champ adversaire dans la création de défi.
+        Retourne (succes: bool, donnees_ou_message: list|str)
+        La liste est généralement une liste de dictionnaires.
+        """
+        try:
+            # Utiliser un endpoint public (à implémenter côté backend)
+            response = requests.get(f"{BASE_URL}/eleves", timeout=10)
+            if response.status_code == 200:
+                return True, response.json()
+            return False, "Erreur lors de la récupération des élèves."
         except requests.exceptions.RequestException:
             return False, "Impossible de joindre le serveur. Vérifiez votre connexion."
 

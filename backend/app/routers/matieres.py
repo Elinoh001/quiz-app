@@ -7,6 +7,22 @@ from app.database import get_db
 router = APIRouter(prefix="/matieres", tags=["matieres"])
 
 
+@router.get("", response_model=list[str])
+def lister_matieres_disponibles(db: Session = Depends(get_db)):
+    """
+    Liste les noms des matières de niveau universitaire, pour peupler la liste
+    déroulante côté application mobile (pas besoin de connaître le nom exact
+    à l'avance, ni de gérer les fautes de frappe).
+    """
+    matieres = (
+        db.query(models.Matiere)
+        .filter(models.Matiere.niveau == "universitaire")
+        .order_by(models.Matiere.nom)
+        .all()
+    )
+    return [m.nom for m in matieres]
+
+
 @router.get("/{nom}", response_model=schemas.MatiereCheckResponse)
 def verifier_matiere(nom: str, db: Session = Depends(get_db)):
     matiere = db.query(models.Matiere).filter(models.Matiere.nom.ilike(nom)).first()
